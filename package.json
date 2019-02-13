@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test":"mocha server/**/*.test.js",
-    "test-watch":"nodemon --exec 'npm test'"
+    "test": "mocha server/**/*.test.js",
+    "test-watch": "nodemon --exec 'npm test'",
+    "nodemon": "nodemon",
   },
   "author": "",
   "license": "ISC",
