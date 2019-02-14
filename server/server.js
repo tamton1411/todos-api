@@ -6,6 +6,7 @@ const _ = require('lodash');
 const { mongoose } = require('./db/mongoose');
 const { Todo } = require('./models/Todo');
 const { User } = require('./models/User');
+const { authenticate } = require('./middleware/authenticate');
 
 const app = express()
 app.use(bodyParser.json());
@@ -109,6 +110,9 @@ app.post('/users', (req, res) => {
         })
 })
 
+app.get('/users/me', authenticate, (req, res) => {
+    res.send(req.user);
+})
 
 
 
