@@ -218,7 +218,6 @@ describe("POST /users", () => {
             .end(done)
     })
     it("Should not create user if email in use", done => {
-        const email = "fuadtamtonn@gmail.com";
         const password = "somethinundefined"
         request(app)
             .post('/users')
