@@ -3,8 +3,9 @@ const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
 const _ = require('lodash');
 
-const { mongoose } = require('./db/mongoose')
-const { Todo } = require('./models/Todo')
+const { mongoose } = require('./db/mongoose');
+const { Todo } = require('./models/Todo');
+const { User } = require('./models/User');
 
 const app = express()
 app.use(bodyParser.json());
@@ -88,6 +89,32 @@ app.patch('/todos/:id', (req, res) => {
         })
 
 })
+
+
+
+
+
+app.post('/users', (req, res) => {
+    let body = _.pick(req.body, ['email', 'password']);
+    const user = new User(body)
+
+    user.save().then(user => {
+        return user.generateAuthToken();
+    })
+        .then(token => {
+            res.header('x-auth', token).send(user)
+        })
+        .catch(e => {
+            res.status(400).send(e)
+        })
+})
+
+
+
+
+
+
+
 
 app.listen(3000, () => {
     console.log("Started on Port 3000")
