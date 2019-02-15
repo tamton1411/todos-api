@@ -222,10 +222,53 @@ describe("POST /users", () => {
         request(app)
             .post('/users')
             .send({
-                email:users[0].email,
+                email: users[0].email,
                 password
             })
             .expect(400)
             .end(done)
     })
+})
+
+describe("POST users/login", () => {
+    it("should login user and return auth token ", (done) => {
+        const email = 'fuad@gmail.com';
+        request(app)
+            .post('/users/login')
+            .send({
+                email: users[0].email,
+                password: users[0].password
+            })
+            .expect(200)
+            .expect(user => {
+                expect(user.header['x-auth']).toBeTruthy()
+            })
+            .end((err, res) => {
+                if (err) {
+                    return done(err)
+                }
+                User.findById(users[0]._id).then(user => {
+                    expect(user.tokens[0]).toInclude({
+                            access: 'auth',
+                        token: res.header['x-auth']
+                    })
+                    done()
+                }).catch(e => done())
+            })
+
+    })
+    it("Should reject invalid login", (done) => {
+        request(app)
+            .post('/users/login')
+            .send({
+                email: "fuadtamton@gmail.com",
+                password: 'userpsasw'
+            })
+            .expect(400)
+            .expect(user => {
+                expect(user.header['x-auth']).toBeFalsy()
+            })
+            .end(done)
+    })
+
 })
