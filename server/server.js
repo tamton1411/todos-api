@@ -10,7 +10,6 @@ const { authenticate } = require('./middleware/authenticate');
 
 const app = express()
 app.use(bodyParser.json());
-
 app.post('/todos', authenticate, (req, res) => {
     const todo = new Todo({
         text: req.body.text,
